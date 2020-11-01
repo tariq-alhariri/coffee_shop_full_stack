@@ -30,8 +30,6 @@ CORS(app)
 @app.route('/drinks')
 def get_drinks():
     drinks = Drink.query.all()
-    if drinks:
-        print('-------------------------------------------> drinks not empty')
     drinks = [drink.short() for drink in drinks]
     return jsonify({
         "success": True, 
@@ -66,7 +64,21 @@ def get_drinks_detail():
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks', methods=['POST'])
+@requires_auth('post:drinks')
+def post_drinks():
+    body = request.get_json()
+    title = body.get('title', None)
+    recipe = body.get('recipe', None)
 
+    drink = Drink(title=title, recipe=recipe)
+    print('-----------------------> drink', drink)
+    drink.insert()
+    drink = drink.long()
+    return jsonify({
+        'success': True,
+        'drink': drink
+    })
 
 '''
 @TODO implement endpoint
