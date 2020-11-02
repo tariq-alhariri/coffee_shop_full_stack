@@ -139,6 +139,13 @@ def not_found(error):
         'error': 404,
         'message': 'resource not found'
         }), 404
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        'success': False,
+        'error': 400,
+        'message': 'bad request'
+    }), 400
 
 '''
 @TODO implement error handler for AuthError
