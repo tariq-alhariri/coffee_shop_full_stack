@@ -176,3 +176,10 @@ def unauthorized_user(error):
 @TODO implement error handler for AuthError
     error handler should conform to general task above 
 '''
+@app.errorhandler(AuthError)
+def handle_auth_error(error):
+    return jsonify({
+        'success': False,
+        'error': error.status_code,
+        'message': error.error
+    }), error.status_code
