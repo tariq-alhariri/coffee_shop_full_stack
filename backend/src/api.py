@@ -46,7 +46,7 @@ def get_drinks():
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks-detail')
-@requires_auth('get:drinks-detail')
+#@requires_auth('get:drinks-detail')
 def get_drinks_detail():
     drinks = Drink.query.all()
     drinks = [drink.long() for drink in drinks]
@@ -65,19 +65,17 @@ def get_drinks_detail():
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=['POST'])
-@requires_auth('post:drinks')
+#@requires_auth('post:drinks')
 def post_drinks():
     body = request.get_json()
-    title = body.get('title', None)
-    recipe = body.get('recipe', None)
-
-    drink = Drink(title=title, recipe=recipe)
-    print('-----------------------> drink', drink)
-    drink.insert()
-    drink = drink.long()
+    title = body.get("title", None)
+    recipe = body.get("recipe", None)
+    new_drink = Drink(title=json.dumps(title), recipe=json.dumps(recipe))
+    Drink.insert(new_drink)
+    new_drink = new_drink.long()
     return jsonify({
         'success': True,
-        'drink': drink
+        'drink': new_drink
     })
 
 '''
